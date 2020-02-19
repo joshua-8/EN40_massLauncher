@@ -5,9 +5,9 @@ const=[9.8,.9652,3.175,.0454]; %g, maxHeight, maxMass, minLaunchedMass
 tSpan=[0:.0001:1];
 
 % mass, massHeight, springConstant, springHeight
-DV=[[.05,.01,80,.09];
-    [1,.02,150,.12];
-    [2,.02,300,.12]];
+DV=[[.05,.003175,423,.1016];
+    [.38,.0254,3130.5,.127];
+    [2.64,.0762,23393.9,.1016]];
 
 findlaunchvel(DV,const,tSpan)
 
@@ -37,7 +37,7 @@ function vel=findlaunchvel(DV,const,tSpan)
     
     %[x1,v1,x2,v2,xn,vn]
     [times,sols]=ode45(@(t,w) diffeq(t,w,sizeArr(1),DV,const),tSpan,initialW,options);
-    
+
     vel=max(sols(:,2));
 
 end
