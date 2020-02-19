@@ -51,7 +51,7 @@ function dwdt=diffeq(~,w,N,DV,const)
         if i==1
             Fnm1=0; %nothing pushes down on the top mass
         else
-            Fnm1=(w(i*2-3)-w(i*2-1)-DV(i-1,2)-DV(i-1,4))*DV(i-1,3);
+            Fnm1=(w(i*2-3)-w(i*2-1)-DV(i-1,2)-DV(i-1,4))*DV(i-1,3); %force from mass above
         end
         if i==N
             Fn=(w(i*2-1)-DV(i,2)-DV(i,4))*DV(i,3); %x(n+1)=0, the ground
