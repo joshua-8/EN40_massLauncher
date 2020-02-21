@@ -1,6 +1,9 @@
 function optimizer
-syms m1 m2 m3 k1 k2 k3
 clc
+clear all;
+close all;
+
+syms m1 m2 m3 k1 k2 k3
 
 % g, maxHeight
 const = [9.8, 0.9652]; 
@@ -30,8 +33,8 @@ maxvars = [[2.649, 23393.92];
 
 A = []; b = []; C = []; d= [];
 
-optimalvars = fmincon(@(DV) - findlaunchvel(DV, heights, const, tSpan), guess, A, b, C, d, minvars, maxvars)
-optimalvel = findlaunchvel(optimalvars, heights, const, tSpan)
+optimalvars = fmincon(@(DV) - findlaunchvel(DV, heights, const, tSpan, false), guess, A, b, C, d, minvars, maxvars)
+optimalvel = findlaunchvel(optimalvars, heights, const, tSpan, false)
 
 %our picked variables from tables of values
 
@@ -43,10 +46,10 @@ finalheights = [[0.003175, 0.127];
                 [0.0254, 0.1016];
                 [0.0762, 0.1016]];
            
-finalvel = findlaunchvel(finalDV, finalheights, const, tSpan)
+finalvel = findlaunchvel(finalDV, finalheights, const, tSpan, true)
 end
 
-function vel = findlaunchvel(DV, heights, const, tSpan)
+function vel = findlaunchvel(DV, heights, const, tSpan, makePlot)
     sizeArr = size(DV);
     w = zeros(sizeArr(1) * 2, 1);
     initialW = zeros(sizeArr(1) * 2, 1);
@@ -65,10 +68,25 @@ function vel = findlaunchvel(DV, heights, const, tSpan)
     
     %[x1,v1,x2,v2,xn,vn]
     [time, sols] = ode45(@(t,w) diffeq(t, w, sizeArr(1), heights, DV, const), tSpan, initialW, options);
-    %figure
-    %plot(time,sols(:,1:2:5))
     vel = max(sols(:, 2));
-
+    if makePlot
+        plot(time,sols(:,1:2:sizeArr(1)*2));
+        title("position");
+        figure;
+        plot(time,sols(:, 2:2:sizeArr(1)*2));
+        title("velocity");
+        figure;
+        hold on;
+    for i=1:sizeArr(1) %for each spring, find spring displacement
+        if i==sizeArr(1)
+            plot(time,(sols(:,i*2-1)-heights(i,1)-heights(i,2))); %x(n+1)=0, the ground
+        else
+            plot(time,(sols(:,i*2-1)-sols(:,i*2+1)-heights(i,1)-heights(i,2))); %normal calc
+        end
+    end
+    hold off;
+    title("spring stretch");
+    end
 end
 
 %[v1,a1,v2,a2,vn,an]
