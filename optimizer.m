@@ -6,7 +6,7 @@ close all;
 syms m1 m2 m3 k1 k2 k3
 
 % g, maxHeight
-const = [9.8, 0.9652]; 
+const = [9.8, 0.53]; %we changed the max height in order to prevent spring over-deflection
 tSpan = [0, 1];
 
 % mass height, spring height (for initial test, just use random heights)
@@ -34,7 +34,7 @@ maxvars = [[2.649, 23393.92];
 A = []; b = []; C = []; d= [];
 
 optimalvars = fmincon(@(DV) - findlaunchvel(DV, heights, const, tSpan, false), guess, A, b, C, d, minvars, maxvars)
-optimalvel = findlaunchvel(optimalvars, heights, const, tSpan, false)
+optimalvel = findlaunchvel(optimalvars, heights, const, tSpan, true)
 
 %our picked variables from tables of values
 
@@ -46,7 +46,7 @@ finalheights = [[0.003175, 0.127];
                 [0.0254, 0.1016];
                 [0.0762, 0.1016]];
            
-finalvel = findlaunchvel(finalDV, finalheights, const, tSpan, true)
+finalvel = findlaunchvel(finalDV, finalheights, const, tSpan, false)
 end
 
 function vel = findlaunchvel(DV, heights, const, tSpan, makePlot)
