@@ -13,7 +13,7 @@ mkdir(workingDir)
 mkdir(workingDir,subDir)
 
 impactVideo = [];
-movieFileName = 'Sample_Movie1.MOV'; % Default file name
+movieFileName = 'DSC_0057.MOV'; % Default file name
 
 
 
